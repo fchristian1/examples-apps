@@ -1,82 +1,118 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Todo - 1</title>
-    <link rel="stylesheet" href="style.css" />
+    <style>
+      * {
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+      }
+      .todo {
+        padding: 8px 16px;
+        border-radius: 2px;
+        background-color: rgb(255, 233, 204);
+        margin-top: 4px;
+        cursor: pointer;
+      }
+      .todo:hover {
+        background-color: rgb(255, 218, 170);
+      }
+      #newTodoTextInput {
+        display: none;
+      }
+    </style>
+    <title>ToDo - 1</title>
   </head>
   <body>
-    <nav>
-        <div class="pointer flex col col-3 gapr-4 px-8 py-4">
-
-            <div class="pointer gap-4 p-color-h pl-bgcolor-h flex center-v border-1 border-8 mx-4 my-2 px-4 py-2">
-                <img src="svg/account_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg" alt="" srcset="">User</nav>
-            </div>
-        </div>
-    <main class="h-500">
-      <div class="flex col-12">
-        <div class="pointer flex col col-3 gapr-4 px-8 py-4 pll-bgcolor">
-          <div
-            class="pointer gap-4 p-color-h pl-bgcolor-h flex center-v border-1 border-8 mx-4 my-2 px-4 py-2"
-          >
-            <img
-              src="svg/add_circle_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg"
-              alt=""
-            />
-            Aufgabe Hinzufügen
-          </div>
-          <div
-            class="pointer gap-4 p-color-h pl-bgcolor-h flex center-v border-1 border-8 mx-4 my-2 px-4 py-2"
-          >
-            <img
-              src="svg/search_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg"
-              alt=""
-            />
-            Suche
-          </div>
-          <div
-            class="pointer gap-4 p-color-h pl-bgcolor-h flex center-v border-1 border-8 mx-4 my-2 px-4 py-2"
-          >
-            <img
-              src="svg/newsstand_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg"
-              alt=""
-            />
-            Eingang
-          </div>
-          <div
-            class="pointer gap-4 p-color-h pl-bgcolor-h flex center-v border-1 border-8 mx-4 my-2 px-4 py-2"
-          >
-            <img
-              src="svg/calendar_today_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg"
-              alt=""
-            />
-            Heute
-          </div>
-          <div
-            class="pointer gap-4 p-color-h pl-bgcolor-h flex center-v border-1 border-8 mx-4 my-2 px-4 py-2"
-          >
-            <img
-              src="svg/calendar_month_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg"
-              alt=""
-            />
-            Demnächst
-          </div>
-          <div
-            class="pointer gap-4 p-color-h pl-bgcolor-h flex center-v border-1 border-8 mx-4 my-2 px-4 py-2"
-          >
-            <img
-              src="svg/action_key_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg"
-              alt=""
-            />
-            Filter und Etiketten
-          </div>
-        </div>
-        <div class="col-7 px-8 py-4">main-view</div>
-        <div class="col-2 px-8 py-4">right-side</div>
+    <nav>ToDo</nav>
+    <main>
+      <div id="new">
+        <button onclick="clickPlusTodo()">+</button>
+        <input
+          type="text"
+          name="newTodoText"
+          id="newTodoTextInput"
+          style="display: none"
+          onkeypress="keyPressNewTodoTextInput(event)"
+        />
       </div>
+      <span id="clear">
+        drücken sie auf das + um ein neues ToDo zu ersellen...
+      </span>
+      <div id="todos"></div>
     </main>
-    <footer class="px-8 py-4">Impressum</footer>
-    <script src="script.js"></script>
+    <script>
+      let todos = [
+        { id: "7b276f3e-b24d-48e7-922a-95feb2dc2e73", header: "test1" },
+        { id: "4858c27c-3d54-49a2-bb12-0c218804e82c", header: "test2" },
+        { id: "a5284ea5-3a04-4dee-ac04-e253fcf3097b", header: "test3" },
+      ];
+
+      const newTodoTextInputHTML = document.getElementById("newTodoTextInput");
+      const todosHTML = document.getElementById("todos");
+      const clearHTML = document.getElementById("clear");
+      const displayData = () => {
+        todos.forEach((element) => {
+          addTodo(element.header, element.id);
+        });
+        checkAndClear();
+      };
+      const keyPressNewTodoTextInput = (event) => {
+        if (
+          document.activeElement === newTodoTextInputHTML &&
+          event.key === "Enter"
+        ) {
+          if (newTodoTextInputHTML.value !== "") {
+            addNewTodo(newTodoTextInputHTML.value);
+            checkAndClear();
+          }
+        }
+      };
+      const clickPlusTodo = () => {
+        if (newTodoTextInputHTML.style.display == "none") {
+          newTodoTextInputHTML.style.display = "inline";
+        } else {
+          if (newTodoTextInputHTML.value == "") {
+            newTodoTextInputHTML.style.display = "none";
+          } else {
+            addNewTodo(newTodoTextInputHTML.value);
+            checkAndClear();
+          }
+        }
+      };
+      const clickOnTodo = (id) => {
+        console.log(id);
+      };
+      const checkAndClear = () => {
+        if (todosHTML.childElementCount > 0) {
+          clearHTML.style.display = "none";
+        } else {
+          clearHTML.style.display = "inline";
+        }
+      };
+      const resetToInit = () => {
+        newTodoTextInputHTML.value = "";
+        newTodoTextInputHTML.style.display = "none";
+      };
+      const addNewTodo = (header) => {
+        let newTodo = { id: crypto.randomUUID(), header };
+        todos.push(newTodo);
+        addTodo(newTodo.header, newTodo.id);
+      };
+      const addTodo = (header, id) => {
+        let newTodoElement = document.createElement("div");
+        newTodoElement.classList.add("todo");
+        newTodoElement.id = id;
+        newTodoElement.addEventListener("click", () => {
+          clickOnTodo(id);
+        });
+        let newTodoHeader = `<span>${header}</span>`;
+        newTodoElement.innerHTML = newTodoHeader;
+        todosHTML.appendChild(newTodoElement);
+        resetToInit();
+      };
+      displayData();
+    </script>
   </body>
 </html>
